@@ -1,26 +1,68 @@
-import React from "react";
-
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
+import React, { useState, useEffect } from "react";
 
 //create your first component
 const Home = () => {
-	return (
-		<div className="text-center">
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
-		</div>
-	);
+	const startingTime = 5
+
+  const [text, setWord] = useState("");
+  const [timer, setTimer] = useState(startingTime);
+  const [isRunningGame, setRunningGame] = useState(false);
+  const [wordCount, setWordCount] = useState(0)
+
+  const handleChange = (event) => {
+    setWord(event.target.value);
+  };
+
+  const countWords = (text) => {
+    let wordsArray = text.trim().split(" ");
+    return wordsArray.filter((words) => words !== " ").length;
+  };
+
+  const StartGame = ()=>{
+	setRunningGame(true)
+	console.log(countWords(text))
+	setTimer(startingTime)
+	setWord("")
+  }
+
+  const endGame = ()=>{
+	setRunningGame(false)
+	setWordCount(countWords(text))
+  }
+
+  useEffect(() => {
+    if (isRunningGame && timer > 0) {
+      var timeoutId = setTimeout(() => {
+        setTimer((prevTime) => prevTime - 1);
+        console.log(timer);
+      }, 1000);
+    } else {
+      clearTimeout(timeoutId);
+	  endGame() 
+    }
+  }, [timer, isRunningGame]);
+
+
+  return (
+    <div>
+      <div className="header">
+        <h1>Type as fast as you can...</h1>
+      </div>
+      <div className="main-textarea">
+        <textarea onChange={handleChange} value={text} disabled={!isRunningGame}></textarea>
+      </div>
+      <div className="amount-time">
+        <h4>Time remaining: {timer}</h4>
+      </div>
+      <button
+        onClick={StartGame}
+		disabled={isRunningGame}
+>
+Start!</button>
+
+      <h1>{`Words count: ${wordCount}`}</h1>
+    </div>
+  );
 };
 
 export default Home;
