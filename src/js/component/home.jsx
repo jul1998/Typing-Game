@@ -18,7 +18,7 @@ const Home = () => {
     return wordsArray.filter((words) => words !== " ").length;
   };
 
-  const StartGame = ()=>{
+  const startGame = ()=>{
 	setRunningGame(true)
 	console.log(countWords(text))
 	setTimer(startingTime)
@@ -55,7 +55,7 @@ const Home = () => {
         <h4>Time remaining: {timer}</h4>
       </div>
       <button
-        onClick={StartGame}
+        onClick={startGame}
 		disabled={isRunningGame}
 >
 Start!</button>
